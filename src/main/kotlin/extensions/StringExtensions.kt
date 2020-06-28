@@ -1,7 +1,7 @@
 package extensions
 
 /** Returns `true` if the every character of the [String] is a letter */
-fun String.isLetterOnly() = this.all { it.isLetter() }
+fun String.areLetters() = this.isNotEmpty() && this.all { it.isLetter() }
 
 fun String.toTitleCase() = this.toLowerCase().capitalize()
 

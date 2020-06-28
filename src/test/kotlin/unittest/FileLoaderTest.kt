@@ -51,6 +51,7 @@ class FileLoaderTest : StringSpec() {
         }
 
         "saveWords() should write a set of words to a file" {
+            // TODO: fix test
             val writeContent = "word\nwords".toByteArray()
             val outputMock = mockk<FileOutputStream>()
 

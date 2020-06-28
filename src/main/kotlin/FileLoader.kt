@@ -1,4 +1,4 @@
-import extensions.isLetterOnly
+import extensions.areLetters
 import java.io.File
 
 object FileLoader {
@@ -21,7 +21,7 @@ object FileLoader {
      * @return The eligible words.
      */
     fun loadWords(path: String): MutableSet<String> = extractWords(path)
-        .filter { it.isLetterOnly() }
+        .filter { it.areLetters() }
         .toMutableSet()
 
     /**

@@ -1,6 +1,7 @@
 import extensions.elongateTo
 import extensions.enclosedBy
 import extensions.toUnorderedList
+import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.*
 
@@ -17,16 +18,27 @@ object App {
 
         while (true) {
             println("Enter one of the following commands")
-            println(ProcessEnum.values().toUnorderedList())
+            println(Commands.values().toUnorderedList())
             println("To exit, enter $INPUT_FOR_EXIT")
             print("Your input > ")
-            val command = scanner.next().toLowerCase()
+            val command = scanner.nextLine().toLowerCase()
 
             if (command == INPUT_FOR_EXIT) break
 
             try {
                 println('-' elongateTo 50)
-                println(ProcessEnum.valueOf(command.toUpperCase()).process(words))
+                val commandObject = Commands.valueOf(command.toUpperCase())
+
+                while (true) {
+                    println(commandObject.inputMessage)
+                    val userInput = scanner.nextLine()
+
+                    if (userInput == INPUT_FOR_STOP) break
+
+                    commandObject.process(userInput, words)
+                }
+
+                FileLoader.saveWords(FILE_PATH, words)
             } catch (e: IllegalArgumentException) {
                 println("The command $command does not exist!")
             }

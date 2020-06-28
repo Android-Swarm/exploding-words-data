@@ -1,21 +1,37 @@
-import java.util.*
+import extensions.areLetters
 
-val scanner = Scanner(System.`in`)
-
-enum class ProcessEnum(val process: (words: MutableSet<String>) -> String) {
-    CHECK({
-        while (true) {
-            print("Enter a word to be checked (!stop to stop): ")
-
-            val requestedWord = scanner.next().toLowerCase()
-
-            if (requestedWord == "!stop") {
-                break
+enum class Commands(
+    val inputMessage: String,
+    val process: (userInput: String, words: MutableSet<String>) -> Unit
+) {
+    CHECK("Enter a word to be checked ($INPUT_FOR_STOP to stop): ",
+        { requestedWord, wordSet ->
+            println(
+                "$requestedWord -> ${if (requestedWord in wordSet) "Yes\u2713" else "NO\u2717 -- consider " +
+                        "adding to the database"}"
+            )
+        }
+    ),
+    ADD("Enter a word to add ($INPUT_FOR_STOP to stop):",
+        { newWord, wordSet ->
+            if (!newWord.areLetters()) {
+                println(INVALID_WORD_MESSAGE)
             } else {
-                println("$requestedWord -> ${if (requestedWord in it) "yes" else "NO"}")
+                if (wordSet.add(newWord.toLowerCase())) {
+                    println("$newWord -- ADDED!")
+                } else {
+                    println("$newWord -- ALREADY EXISTS!")
+                }
             }
         }
-
-        "Stopped searching for word"
-    })
+    ),
+    DELETE("Enter a word to delete ($INPUT_FOR_STOP to stop):",
+        { target, wordSet ->
+            if (wordSet.remove(target.toLowerCase())) {
+                println("$target -- DELETED!")
+            } else {
+                println("$target -- NOT FOUND!")
+            }
+        }
+    )
 }
