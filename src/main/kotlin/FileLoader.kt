@@ -31,5 +31,8 @@ object FileLoader {
      * @param words The list of words to serialize.
      */
     fun saveWords(path: String, words: Set<String>) = File(path)
-        .writeText(words.joinToString("\n"))
+        .writeText(words.joinToString("\r\n"))
+
+    fun dumpWords(path: String, words: Set<Word>) =
+        File(path).writeText("[${words.joinToString(separator = ",") { it.toJsonString() }}]")
 }

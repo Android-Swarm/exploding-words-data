@@ -1,14 +1,15 @@
 package unittest
 
 import Commands
+import Word
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.data.blocking.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.mockk.clearAllMocks
+import io.mockk.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
@@ -45,6 +46,7 @@ class CommandsTest : StringSpec() {
                 row("word", mutableSetOf(), mutableSetOf("word")),
                 row("WoRd", mutableSetOf(), mutableSetOf("word")),
                 row("word!", mutableSetOf(), mutableSetOf()),
+                row("two words", mutableSetOf(), mutableSetOf()),
                 row("word", mutableSetOf("word"), mutableSetOf("word")),
                 row("WoRd", mutableSetOf("word"), mutableSetOf("word"))
             ) { wordToAdd, initial, result ->
@@ -58,6 +60,7 @@ class CommandsTest : StringSpec() {
                 row("", mutableSetOf("hello"), mutableSetOf("hello")),
                 row("word", mutableSetOf("word"), mutableSetOf()),
                 row("WoRd", mutableSetOf("word"), mutableSetOf()),
+                row("two word", mutableSetOf("word"), mutableSetOf("word")),
                 row("word!", mutableSetOf("hello"), mutableSetOf("hello")),
                 row("word", mutableSetOf("hello"), mutableSetOf("hello"))
             ) { wordToDelete, initial, result ->
@@ -66,6 +69,4 @@ class CommandsTest : StringSpec() {
             }
         }
     }
-
-
 }

@@ -1,7 +1,6 @@
 import extensions.elongateTo
 import extensions.enclosedBy
 import extensions.toUnorderedList
-import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.*
 
@@ -15,6 +14,7 @@ object App {
 
     fun run() {
         println(WELCOME_MESSAGE enclosedBy '*')
+        println("-Loaded ${words.size} words-")
 
         while (true) {
             println("Enter one of the following commands")
@@ -27,15 +27,16 @@ object App {
 
             try {
                 println('-' elongateTo 50)
-                val commandObject = Commands.valueOf(command.toUpperCase())
 
-                while (true) {
-                    println(commandObject.inputMessage)
-                    val userInput = scanner.nextLine()
+                Commands.valueOf(command.toUpperCase()).run {
+                    while (true) {
+                        println(this.inputMessage)
+                        val userInput = scanner.nextLine()
 
-                    if (userInput == INPUT_FOR_STOP) break
+                        if (userInput == INPUT_FOR_STOP) break
 
-                    commandObject.process(userInput, words)
+                        this.process(userInput, words)
+                    }
                 }
 
                 FileLoader.saveWords(FILE_PATH, words)

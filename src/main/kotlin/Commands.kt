@@ -1,4 +1,6 @@
 import extensions.areLetters
+import kotlinx.coroutines.runBlocking
+import kotlin.system.measureTimeMillis
 
 enum class Commands(
     val inputMessage: String,
@@ -12,7 +14,7 @@ enum class Commands(
             )
         }
     ),
-    ADD("Enter a word to add ($INPUT_FOR_STOP to stop):",
+    ADD("Enter a word to add ($INPUT_FOR_STOP to stop): ",
         { newWord, wordSet ->
             if (!newWord.areLetters()) {
                 println(INVALID_WORD_MESSAGE)
@@ -25,7 +27,7 @@ enum class Commands(
             }
         }
     ),
-    DELETE("Enter a word to delete ($INPUT_FOR_STOP to stop):",
+    DELETE("Enter a word to delete ($INPUT_FOR_STOP to stop): ",
         { target, wordSet ->
             if (wordSet.remove(target.toLowerCase())) {
                 println("$target -- DELETED!")
@@ -33,5 +35,21 @@ enum class Commands(
                 println("$target -- NOT FOUND!")
             }
         }
+    ),
+
+    DUMP("Enter $INPUT_FOR_STOP to cancel, otherwise enter anything: ",
+        { input, wordSet ->
+            val wordsTest = wordSet.take(500).toSet()
+
+            if (input != INPUT_FOR_STOP) {
+                runBlocking {
+                    println("Operation done in ${measureTimeMillis {
+                        FileLoader.dumpWords(DUMP_PATH, ApiFetcher().convertStringsToWord(wordsTest))
+                    }} ms")
+                }
+            }
+        }
     )
 }
+
+

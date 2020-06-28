@@ -10,3 +10,10 @@ infix fun String.enclosedBy(decorator: Char): String {
     val border = decorator elongateTo middle.length
     return "$border\n$middle\n$border"
 }
+
+fun String.clean() = this
+    .filter {
+        it.isLetterOrDigit() || it.isWhitespace() || it !in "[]"
+    }
+    .replace("\r\n", "")
+    .replace("""\"""", "\"")
