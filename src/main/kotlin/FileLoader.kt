@@ -1,6 +1,7 @@
 import extensions.areLetters
 import java.io.File
 
+/** This class handles interactions with the text file. */
 object FileLoader {
 
     /**
@@ -25,14 +26,20 @@ object FileLoader {
         .toMutableSet()
 
     /**
-     * Serializes a list of words to the text file in the specified [path].
+     * Serializes a list of string to the text file in the specified [path].
      *
      * @param path The target file path.
-     * @param words The list of words to serialize.
+     * @param words The list of [String] to serialize.
      */
     fun saveWords(path: String, words: Set<String>) = File(path)
         .writeText(words.joinToString("\r\n"))
 
+    /**
+     * Serializes the [Word]'s word, definition, and meaning into a JSON array representation.
+     *
+     * @param path The destination file path.
+     * @param words The list of [Word] to serialize
+     */
     fun dumpWords(path: String, words: Set<Word>) =
         File(path).writeText("[${words.joinToString(separator = ",") { it.toJsonString() }}]")
 }

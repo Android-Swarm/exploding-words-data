@@ -13,8 +13,6 @@ import kotlin.reflect.jvm.isAccessible
 
 class FileLoaderTest : StringSpec() {
 
-    private val testFilePath = FileLoaderTest::class.java.getResource("/words_test.txt").path
-
     override fun beforeTest(testCase: TestCase) {
         mockkObject(FileLoader)
         mockkStatic("kotlin.io.FilesKt__UtilsKt")
@@ -33,31 +31,20 @@ class FileLoaderTest : StringSpec() {
         "loadWords() should call extractWords() method" {
 
             val spy = spyk<FileLoader>(recordPrivateCalls = true)
-            spy.loadWords(testFilePath)
 
-            verify { spy["extractWords"](testFilePath) }
+            every { spy["extractWords"](any<String>()) } returns
+                    listOf<String>()
+            spy.loadWords("")
+
+            verify { spy["extractWords"]("") }
         }
 
         "loadWords() should filter out multiple words and words with special characters" {
-            every {
-                FileLoader::class.memberFunctions.find { it.name == "extractWords" }?.let {
-                    it.isAccessible = true
-                    it.call(FileLoader, testFilePath)
-                }
-            } returns
+            val spy = spyk<FileLoader>(recordPrivateCalls = true)
+            every { spy["extractWords"](any<String>()) } returns
                     listOf("this", "document or file", "is (maybe) the", "testing", "document!")
 
-            FileLoader.loadWords(testFilePath) shouldBe mutableSetOf("this", "testing")
-        }
-
-        "saveWords() should write a set of words to a file" {
-            // TODO: fix test
-            val writeContent = "word\nwords".toByteArray()
-            val outputMock = mockk<FileOutputStream>()
-
-            every { outputMock.use { it.write(writeContent) } } returns println("Write to file called")
-
-            FileLoader.saveWords(testFilePath, setOf("word", "words")) shouldBe println("Write to file called")
+            spy.loadWords("") shouldBe mutableSetOf("this", "testing")
         }
     }
 }

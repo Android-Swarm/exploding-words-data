@@ -16,10 +16,7 @@ class ApiFetcher {
     suspend fun convertStringsToWord(words: Set<String>) =
         withContext(Dispatchers.IO) {
             words.map { async { ApiFetcher().getBestResult(it) } }
-                .map {
-                    val result = it.await()
-                    result
-                }
+                .map { it.await() }
                 .toSet()
         }
 }

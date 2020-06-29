@@ -13,20 +13,22 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
+private val originalOut = System.out
+
+fun <T, R, U> ((T, U) -> R).captureConsoleOut(a: T, b: U): String {
+    val dataHolder = ByteArrayOutputStream()
+    System.setOut(PrintStream(dataHolder))
+
+    this(a, b)
+
+    System.out.flush()
+    System.setOut(originalOut)
+    return dataHolder.toString()
+}
+
 class CommandsTest : StringSpec() {
-    private val originalOut = System.out
+
     private val dummy = mutableSetOf("word", "words", "testing")
-
-    private fun <T, R, U> ((T, U) -> R).captureConsoleOut(a: T, b: U): String {
-        val dataHolder = ByteArrayOutputStream()
-        System.setOut(PrintStream(dataHolder))
-
-        this(a, b)
-
-        System.out.flush()
-        System.setOut(originalOut)
-        return dataHolder.toString()
-    }
 
     init {
         "CHECK should tell if the word is in the set" {
