@@ -11,7 +11,9 @@ class ApiFetcher {
         (Klaxon().parse<ApiResponse>(URL("$endpoint?term=$word").readText()) as ApiResponse).list
 
     fun getBestResult(word: String) =
-        fetchFromApi(word).maxBy { it.thumbs_up - it.thumbs_down } ?: Word(word, null, null)
+        fetchFromApi(word).filter { it.word == word }
+            .maxBy { it.thumbs_up - it.thumbs_down }
+            ?: Word(word, null, null)
 
     suspend fun convertStringsToWord(words: Set<String>) =
         withContext(Dispatchers.IO) {

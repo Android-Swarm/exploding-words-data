@@ -13,9 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class ApiFetcherTest : StringSpec() {
-    private val good = Word("good", "def", "ex", 10, 0)
-    private val great = Word("great", "def", "ex", 20, 0)
-    private val best = Word("best", "def", "ex", 30, 0)
+    private val good = Word("word", "def", "ex", 10, 0)
+    private val great = Word("word", "def", "ex", 20, 0)
+    private val best = Word("word", "def", "ex", 30, 0)
     private val notFoundWord = Word("word", null, null)
 
     override fun afterTest(testCase: TestCase, result: TestResult) {

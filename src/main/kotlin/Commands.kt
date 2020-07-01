@@ -1,6 +1,7 @@
 import extensions.areLetters
 import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
+import kotlin.text.Regex
 
 enum class Commands(
     val inputMessage: String,
@@ -37,14 +38,16 @@ enum class Commands(
         }
     ),
 
-    DUMP("Enter $INPUT_FOR_STOP to cancel, otherwise enter anything: ",
+    DUMP("Enter the amount of words to process ($INPUT_FOR_STOP to cancel): ",
         { input, wordSet ->
-            val wordsTest = wordSet.take(500).toSet()
-
-            if (input != INPUT_FOR_STOP) {
-                runBlocking {
+            when {
+                input.contains(Regex("""\D+""")) -> println("Input cannot be a string!")
+                else -> runBlocking {
                     println("Operation done in ${measureTimeMillis {
-                        FileLoader.dumpWords(DUMP_PATH, ApiFetcher().convertStringsToWord(wordsTest))
+                        FileLoader.dumpWords(
+                            DUMP_PATH,
+                            ApiFetcher().convertStringsToWord(wordSet.take(input.toInt()).toSet())
+                        )
                     }} ms")
                 }
             }
