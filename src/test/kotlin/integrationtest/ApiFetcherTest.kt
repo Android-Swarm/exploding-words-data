@@ -7,7 +7,10 @@ import io.kotest.data.blocking.forAll
 import io.kotest.data.row
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 
 class ApiFetcherTest : StringSpec() {
 
@@ -33,6 +36,21 @@ class ApiFetcherTest : StringSpec() {
                     ApiFetcher().convertStringsToWord(input).map { it.word } shouldBe output
                 }
             }
+        }
+
+        "convertStringToWord() should display log if enabled" {
+            val sysOut = System.out
+            val outputHolder = ByteArrayOutputStream()
+            System.setOut(PrintStream(outputHolder))
+
+            runBlocking {
+                ApiFetcher().convertStringsToWord(setOf("hello", "neighbour", "hi"), true)
+            }
+
+            System.out.flush()
+            System.setOut(sysOut)
+
+            outputHolder.toString() shouldContain "(3 / 3)"
         }
     }
 }

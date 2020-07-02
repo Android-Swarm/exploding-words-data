@@ -43,12 +43,17 @@ enum class Commands(
             when {
                 input.contains(Regex("""\D+""")) -> println("Input cannot be a string!")
                 else -> runBlocking {
-                    println("Operation done in ${measureTimeMillis {
+                    measureTimeMillis {
+                        val dumpCount = input.toInt()
+
                         FileLoader.dumpWords(
                             DUMP_PATH,
-                            ApiFetcher().convertStringsToWord(wordSet.take(input.toInt()).toSet())
+                            ApiFetcher().convertStringsToWord(wordSet.take(dumpCount).toSet(), dumpCount > 0)
                         )
-                    }} ms")
+                        
+                    }.run {
+                        println("\nOperation done in $this ms")
+                    }
                 }
             }
         }
