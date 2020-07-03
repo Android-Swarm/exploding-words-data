@@ -8,3 +8,5 @@ const val INPUT_FOR_EXIT = "!exit"
 const val INPUT_FOR_STOP = "!stop"
 
 const val INVALID_WORD_MESSAGE = "Word cannot contain any special characters or whitespaces"
+
+val LINE_BREAK = System.lineSeparator()

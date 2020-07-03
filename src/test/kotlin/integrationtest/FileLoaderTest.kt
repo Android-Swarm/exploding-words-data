@@ -1,5 +1,6 @@
 package integrationtest
 
+import LINE_BREAK
 import Word
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
@@ -18,7 +19,7 @@ class FileLoaderTest : StringSpec() {
         "saveWords() should save a sentence into lines" {
             getResourcePath("temp.txt").run {
                 FileLoader.saveWords(this, setOf("this", "is", "a", "test"))
-                File(this).readText() shouldBe "this\r\nis\r\na\r\ntest"
+                File(this).readText() shouldBe "this${LINE_BREAK}is${LINE_BREAK}a${LINE_BREAK}test"
                 File(this).delete()
             }
         }

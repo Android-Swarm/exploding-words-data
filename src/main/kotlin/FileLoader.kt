@@ -12,7 +12,7 @@ object FileLoader {
      */
     private fun extractWords(path: String): List<String> = File(path)
         .readText()
-        .split("\r\n")
+        .split(LINE_BREAK)
 
     /**
      * Read from a file of words separated in line
@@ -32,7 +32,7 @@ object FileLoader {
      * @param words The list of [String] to serialize.
      */
     fun saveWords(path: String, words: Set<String>) = File(path)
-        .writeText(words.joinToString("\r\n"))
+        .writeText(words.joinToString(LINE_BREAK))
 
     /**
      * Serializes the [Word]'s word, definition, and meaning into a JSON array representation.
