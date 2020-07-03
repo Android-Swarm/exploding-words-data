@@ -45,8 +45,8 @@ class CommandsTest : StringSpec() {
     init {
         "CHECK should tell if the word is in the set" {
             forAll(
-                row("hello", "hello -> NO? -- consider adding to the database"),
-                row("word", "word -> Yes?")
+                row("hello", "hello -> NO"),
+                row("word", "word -> Yes")
             ) { word, consoleOutput ->
 
                 Commands.CHECK.process

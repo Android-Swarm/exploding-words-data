@@ -21,8 +21,8 @@ class CommandsTest : StringSpec() {
     init {
         "CHECK should tell if the word is in the original file" {
             forAll(
-                row("impozible", "impozible -> NO? -- consider adding to the database"),
-                row("word", "word -> Yes?")
+                row("impozible", "impozible -> NO"),
+                row("word", "word -> Yes")
             ) { word, consoleOutput ->
 
                 Commands.CHECK.process
