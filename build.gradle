@@ -18,6 +18,11 @@ test {
 
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
+
+    report {
+        xml.enabled = true
+        html.enabled = false
+    }
 }
 
 dependencies {

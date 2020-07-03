@@ -29,13 +29,13 @@ class WordTest : StringSpec() {
 
         "toJsonString() should clean the example and definition received from the API" {
             forAll(
-                row("""[hello]""", "hello", "hello", "hello"),
-                row("""hello\r\n""", "hello", "hello", "hello"),
-                row("hello", """[hello]""", "hello", "hello"),
-                row("hello", """hello\r\n""", "hello", "hello"),
-                row("hello", "hello", "hello", "hello"),
-                row("hel lo", "hel lo", "hel lo", "hel lo")
-            ) { responseDefinition, responseExample, cleanedDefinition, cleanedExample ->
+                row("""[hello]""", "hello"),
+                row("""hello\r\n""", "hello"),
+                row("hello", """[hello]"""),
+                row("hello", """hello\r\n"""),
+                row("hello", "hello"),
+                row("hel lo", "hel lo")
+            ) { responseDefinition, responseExample ->
 
                 val result = Word("word", responseDefinition, responseExample)
                     .toJsonString()
