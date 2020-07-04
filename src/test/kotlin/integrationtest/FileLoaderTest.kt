@@ -1,9 +1,9 @@
 package integrationtest
 
+import FileLoader
 import LINE_BREAK
 import Word
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 import java.io.File
 

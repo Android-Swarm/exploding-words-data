@@ -4,12 +4,8 @@ import Word
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.blocking.forAll
 import io.kotest.data.row
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.spyk
 
 class WordTest : StringSpec() {
     private val wordUnderTest = Word("word", "def", "ex", 50, 10)

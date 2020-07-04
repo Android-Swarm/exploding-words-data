@@ -1,6 +1,5 @@
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.*
-import java.io.IOException
 import java.net.URL
 
 class ApiFetcher {

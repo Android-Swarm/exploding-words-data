@@ -6,9 +6,6 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.mockk.*
-import java.io.FileOutputStream
-import kotlin.reflect.full.memberFunctions
-import kotlin.reflect.jvm.isAccessible
 
 
 class FileLoaderTest : StringSpec() {

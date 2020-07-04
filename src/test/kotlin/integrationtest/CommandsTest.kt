@@ -1,7 +1,9 @@
 package integrationtest
 
+import Commands
 import DUMP_PATH
 import FILE_PATH
+import FileLoader
 import Word
 import com.beust.klaxon.Klaxon
 import io.kotest.core.spec.style.StringSpec
@@ -9,11 +11,9 @@ import io.kotest.data.blocking.forAll
 import io.kotest.data.row
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldHave
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldStartWith
-import io.kotest.properties.forAll
 import unittest.captureConsoleOut
 import java.io.File
 
@@ -71,6 +71,7 @@ class CommandsTest : StringSpec() {
             val data = FileLoader.loadWords(FILE_PATH)
 
             forAll(
+                row("0 0", 0, 0),
                 row("0 1", 0, 1),
                 row("0 10", 0, 10),
                 row("100 110", 100, 110)

@@ -8,11 +8,10 @@ import io.kotest.core.test.TestResult
 import io.kotest.data.blocking.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
-import io.mockk.*
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.withContext
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.spyk
+import io.mockk.verify
 
 class ApiFetcherTest : StringSpec() {
     private val good = Word("word", "def", "ex", 10, 0)
