@@ -14,7 +14,7 @@ class ApiFetcher {
             .maxBy { it.thumbs_up - it.thumbs_down }
             ?: Word(word, null, null)
 
-    suspend fun convertStringsToWord(words: Set<String>, isLogged: Boolean = false) =
+    suspend fun convertStringsToWord(words: List<String>, isLogged: Boolean = false) =
         withContext(Dispatchers.IO + SupervisorJob()) {
             val progressFormatter = if (isLogged) ProgressFormatter(words.size) else null
 

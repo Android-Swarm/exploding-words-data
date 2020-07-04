@@ -3,7 +3,8 @@ package unittest
 import Commands
 import DUMP_PATH
 import DUMP_EXCEED_MAX_MESSAGE
-import DUMP_INPUT_IS_STRING_MESSAGE
+import DUMP_INPUT_INVALID_MESSAGE
+import DUMP_INVALID_RANGE_MESSAGE
 import FileLoader
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
@@ -85,8 +86,9 @@ class CommandsTest : StringSpec() {
 
         "DUMP should handle input error" {
             forAll(
-                row("hi", DUMP_INPUT_IS_STRING_MESSAGE),
-                row("10001", DUMP_EXCEED_MAX_MESSAGE)
+                row("hi", DUMP_INPUT_INVALID_MESSAGE),
+                row("100 0", DUMP_INVALID_RANGE_MESSAGE),
+                row("0 10001", DUMP_EXCEED_MAX_MESSAGE)
             ) { input, partialErrorMessage ->
                 Commands.DUMP.process.captureConsoleOut(input, mutableSetOf()) shouldContain partialErrorMessage
             }
@@ -95,7 +97,7 @@ class CommandsTest : StringSpec() {
         "DUMP should call dumpWords() method" {
             every { FileLoader.dumpWords(DUMP_PATH, any()) } just Runs
 
-            Commands.DUMP.process("1", mutableSetOf("hello"))
+            Commands.DUMP.process("0 1", mutableSetOf("hello"))
             verify { FileLoader.dumpWords(DUMP_PATH, any()) }
 
         }
@@ -105,7 +107,7 @@ class CommandsTest : StringSpec() {
                     IOException("Error 429: Too many requests!")
 
             Commands.DUMP.process
-                .captureConsoleOut("1", mutableSetOf("hello", "world")) shouldContain "Encountered exception:"
+                .captureConsoleOut("0 2", mutableSetOf("hello", "world")) shouldContain "Encountered exception:"
 
         }
     }

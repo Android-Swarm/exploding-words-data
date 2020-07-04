@@ -28,9 +28,9 @@ class ApiFetcherTest : StringSpec() {
 
         "convertStringToWord() should convert set of strings to set of words" {
             forAll(
-                row(setOf(), listOf()),
-                row(setOf("hello"), listOf("hello")),
-                row(setOf("backs", "zkczljsdkajsdkajsdk"), listOf("backs", "zkczljsdkajsdkajsdk"))
+                row(listOf(), listOf()),
+                row(listOf("hello"), listOf("hello")),
+                row(listOf("backs", "zkczljsdkajsdkajsdk"), listOf("backs", "zkczljsdkajsdkajsdk"))
             ) { input, output ->
                 runBlocking {
                     ApiFetcher().convertStringsToWord(input).map { it.word } shouldBe output
@@ -44,7 +44,7 @@ class ApiFetcherTest : StringSpec() {
             System.setOut(PrintStream(outputHolder))
 
             runBlocking {
-                ApiFetcher().convertStringsToWord(setOf("hello", "neighbour", "hi"), true)
+                ApiFetcher().convertStringsToWord(listOf("hello", "neighbour", "hi"), true)
             }
 
             System.out.flush()

@@ -1,15 +1,14 @@
 package integrationtest
 
+import App
+import Commands
+import DUMP_INPUT_INVALID_MESSAGE
 import EXIT_MESSAGE
 import INPUT_FOR_EXIT
 import INPUT_FOR_STOP
 import LINE_BREAK
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.data.blocking.forAll
-import io.kotest.data.row
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldStartWith
@@ -94,7 +93,7 @@ class AppTest : StringSpec() {
         }
 
         "The application can handle DUMP command" {
-            captureConsoleOutput() shouldContain "Input cannot be a string!"
+            captureConsoleOutput() shouldContain DUMP_INPUT_INVALID_MESSAGE
         }
     }
 }

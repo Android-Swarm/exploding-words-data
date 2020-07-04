@@ -67,15 +67,17 @@ class CommandsTest : StringSpec() {
             }
         }
 
-        "DUMP should only process the inputted number of items" {
+        "DUMP should only process the inputted range" {
             val data = FileLoader.loadWords(FILE_PATH)
 
             forAll(
-                row("0"),
-                row("10")
-            ) {
-                val partialData = data.take(it.toInt())
-                Commands.DUMP.process(it, data)
+                row("0 1", 0, 1),
+                row("0 10", 0, 10),
+                row("100 110", 100, 110)
+            ) { input, start, end ->
+                val partialData = data.toList().slice(start until end)
+
+                Commands.DUMP.process(input, data)
                 Klaxon().parseArray<Word>(File(DUMP_PATH))
                     ?.forEach { word -> word.word shouldBeIn partialData }
             }
@@ -87,7 +89,7 @@ class CommandsTest : StringSpec() {
                 row(mutableSetOf("adbkasndkaskd")),
                 row(mutableSetOf("impossible"))
             ) { word ->
-                Commands.DUMP.process("1", word)
+                Commands.DUMP.process("0 1", word)
                 File(DUMP_PATH).readText().run {
                     this shouldStartWith "[{"
                     this shouldContain word.first()

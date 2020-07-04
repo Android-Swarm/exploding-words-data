@@ -39,31 +39,46 @@ enum class Commands(
         }
     ),
 
-    DUMP("Enter the amount of words to process ($INPUT_FOR_STOP to cancel, maximum $MAX_REQUEST): ",
+    DUMP(
+        "Enter the start (inclusive) and ending index (exclusive) " +
+                "to process separated by space ($INPUT_FOR_STOP to cancel, maximum range $MAX_REQUEST): ",
         { input, wordSet ->
-            when {
-                input.contains(Regex("""\D+""")) -> println(DUMP_INPUT_IS_STRING_MESSAGE)
-                input.toInt() > 10_000 -> println(DUMP_EXCEED_MAX_MESSAGE)
-                else -> runBlocking {
-                    measureTimeMillis {
-                        val dumpCount = input.toInt()
+            if (!Regex("""^\d+ \d+$""").matches(input)) {
+                println(DUMP_INPUT_INVALID_MESSAGE)
+            } else {
+                val (start, end) = extractNumbers(input)
 
-                        try {
-                            FileLoader.dumpWords(
-                                DUMP_PATH,
-                                ApiFetcher().convertStringsToWord(wordSet.take(dumpCount).toSet(), dumpCount > 0)
-                            )
-                        } catch (ioe: IOException) {
-                            println("Encountered exception: ${ioe.message}")
+                when {
+                    end < start -> println(DUMP_INVALID_RANGE_MESSAGE)
+                    end - start > MAX_REQUEST -> println(DUMP_EXCEED_MAX_MESSAGE)
+                    else ->
+                        runBlocking {
+                            measureTimeMillis {
+                                try {
+                                    val resultSet = ApiFetcher().convertStringsToWord(
+                                        wordSet.toList().slice(start until end),
+                                        end - start > 0
+                                    )
+
+                                    FileLoader.dumpWords(DUMP_PATH, resultSet)
+                                } catch (ioe: IOException) {
+                                    println("Encountered exception: ${ioe.message}")
+                                }
+
+                            }.run {
+                                println("\nOperation done in $this ms")
+                            }
                         }
-
-                    }.run {
-                        println("\nOperation done in $this ms")
-                    }
                 }
             }
         }
     )
 }
+
+private fun extractNumbers(input: String) =
+    input.split(" ")
+        .map { it.toInt() }
+        .run { Pair(this[0], this[1]) }
+
 
 
