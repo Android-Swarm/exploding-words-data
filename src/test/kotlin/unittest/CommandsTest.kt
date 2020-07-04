@@ -2,8 +2,9 @@ package unittest
 
 import Commands
 import DUMP_PATH
+import DUMP_EXCEED_MAX_MESSAGE
+import DUMP_INPUT_IS_STRING_MESSAGE
 import FileLoader
-import Word
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
@@ -12,9 +13,8 @@ import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.PrintStream
 
 private val originalOut = System.out
@@ -84,9 +84,12 @@ class CommandsTest : StringSpec() {
         }
 
         "DUMP should handle input error" {
-            Commands.DUMP.process("hi", mutableSetOf())
-            verify { FileLoader wasNot Called }
-
+            forAll(
+                row("hi", DUMP_INPUT_IS_STRING_MESSAGE),
+                row("10001", DUMP_EXCEED_MAX_MESSAGE)
+            ) { input, partialErrorMessage ->
+                Commands.DUMP.process.captureConsoleOut(input, mutableSetOf()) shouldContain partialErrorMessage
+            }
         }
 
         "DUMP should call dumpWords() method" {
@@ -94,6 +97,15 @@ class CommandsTest : StringSpec() {
 
             Commands.DUMP.process("1", mutableSetOf("hello"))
             verify { FileLoader.dumpWords(DUMP_PATH, any()) }
+
+        }
+
+        "Dump should handle IOException error" {
+            every { FileLoader.dumpWords(DUMP_PATH, any()) } throws
+                    IOException("Error 429: Too many requests!")
+
+            Commands.DUMP.process
+                .captureConsoleOut("1", mutableSetOf("hello", "world")) shouldContain "Encountered exception:"
 
         }
     }

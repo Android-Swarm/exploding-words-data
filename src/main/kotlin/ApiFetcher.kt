@@ -1,8 +1,6 @@
 import com.beust.klaxon.Klaxon
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import java.io.IOException
 import java.net.URL
 
 class ApiFetcher {
@@ -17,11 +15,11 @@ class ApiFetcher {
             ?: Word(word, null, null)
 
     suspend fun convertStringsToWord(words: Set<String>, isLogged: Boolean = false) =
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO + SupervisorJob()) {
             val progressFormatter = if (isLogged) ProgressFormatter(words.size) else null
 
             words.map { async { ApiFetcher().getBestResult(it) } }
-                .map { if (isLogged) it.awaitAndLog(progressFormatter) else it.await() }
+                .map { it.awaitAndLog(progressFormatter) }
                 .toSet()
         }
 }
@@ -31,7 +29,7 @@ private suspend fun Deferred<Word>.awaitAndLog(formatter: ProgressFormatter?): W
 
     formatter?.let {
         it.finishOne()
-        print("\r${formatter.getFormattedProgress()} | Last finished the word ${finished.word}.")
+        print("\r${it.getFormattedProgress()} | Last finished the word ${finished.word}.")
     }
 
     return finished

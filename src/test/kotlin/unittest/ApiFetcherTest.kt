@@ -9,7 +9,9 @@ import io.kotest.data.blocking.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.mockk.*
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 
 class ApiFetcherTest : StringSpec() {
@@ -46,21 +48,6 @@ class ApiFetcherTest : StringSpec() {
                 every { spy["fetchFromApi"](any<String>()) } returns mockReturn
                 spy.getBestResult("word") shouldBe output
             }
-        }
-
-        "convertStringToWord() should run in Dispatchers.IO" {
-            mockkStatic("kotlinx.coroutines.BuildersKt__Builders_commonKt")
-            val spy = spyk<ApiFetcher>()
-
-            coEvery { withContext<Set<Word>>(Dispatchers.IO, capture(CapturingSlot())) } answers {
-                setOf(Word("mock", "a mock", "mock with mockk"))
-            }
-
-            spy.convertStringsToWord(setOf("mock"))
-
-            coVerify { withContext<Set<Word>>(Dispatchers.IO, block = any()) }
-
-            clearAllMocks()
         }
     }
 }

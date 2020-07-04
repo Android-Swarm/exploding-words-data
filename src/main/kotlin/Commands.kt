@@ -2,6 +2,7 @@ import extensions.areLetters
 import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
 import kotlin.text.Regex
+import java.io.IOException
 
 enum class Commands(
     val inputMessage: String,
@@ -38,19 +39,24 @@ enum class Commands(
         }
     ),
 
-    DUMP("Enter the amount of words to process ($INPUT_FOR_STOP to cancel): ",
+    DUMP("Enter the amount of words to process ($INPUT_FOR_STOP to cancel, maximum $MAX_REQUEST): ",
         { input, wordSet ->
             when {
-                input.contains(Regex("""\D+""")) -> println("Input cannot be a string!")
+                input.contains(Regex("""\D+""")) -> println(DUMP_INPUT_IS_STRING_MESSAGE)
+                input.toInt() > 10_000 -> println(DUMP_EXCEED_MAX_MESSAGE)
                 else -> runBlocking {
                     measureTimeMillis {
                         val dumpCount = input.toInt()
 
-                        FileLoader.dumpWords(
-                            DUMP_PATH,
-                            ApiFetcher().convertStringsToWord(wordSet.take(dumpCount).toSet(), dumpCount > 0)
-                        )
-                        
+                        try {
+                            FileLoader.dumpWords(
+                                DUMP_PATH,
+                                ApiFetcher().convertStringsToWord(wordSet.take(dumpCount).toSet(), dumpCount > 0)
+                            )
+                        } catch (ioe: IOException) {
+                            println("Encountered exception: ${ioe.message}")
+                        }
+
                     }.run {
                         println("\nOperation done in $this ms")
                     }
