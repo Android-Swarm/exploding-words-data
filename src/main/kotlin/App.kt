@@ -8,10 +8,16 @@ fun main() {
     App.run()
 }
 
+/**
+ * This class is the main interface of this application.
+ */
 object App {
     private val scanner = Scanner(System.`in`)
     private val words = FileLoader.loadWords(FILE_PATH)
 
+    /**
+     * Starts the application.
+     */
     fun run() {
         println(WELCOME_MESSAGE enclosedBy '*')
         println("-Loaded ${words.size} words-")

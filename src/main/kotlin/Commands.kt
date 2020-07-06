@@ -4,6 +4,12 @@ import kotlin.system.measureTimeMillis
 import kotlin.text.Regex
 import java.io.IOException
 
+/**
+ * This enum class adds the features to the application.
+ *
+ * @property inputMessage The message to be printed to give a hint what kind of input is expected.
+ * @property process The implementation of the feature.
+ */
 enum class Commands(
     val inputMessage: String,
     val process: (userInput: String, words: MutableSet<String>) -> Unit
@@ -75,6 +81,11 @@ enum class Commands(
     )
 }
 
+/**
+ * Returns the 2 numbers separated by a space in the given input string as a [Pair] of [Int] .
+ *
+ * @param input The input string. It should contain 2 numbers separated by a space.
+ */
 private fun extractNumbers(input: String) =
     input.split(" ")
         .map { it.toInt() }

@@ -1,6 +1,14 @@
 import extensions.elongateTo
 import kotlin.math.roundToInt
 
+/**
+ * This class formats the progress of a number of tasks.
+ *
+ * @property amount The amount of task to finish.
+ * @property length The length of the progress bar. By default is 30 characters.
+ * @property fillChar The character that represents completed task.
+ * @property spaceChar The character that represents unfinished task.
+ */
 class ProgressFormatter(
     val amount: Int,
     val length: Int = 30,
@@ -18,8 +26,16 @@ class ProgressFormatter(
     val progress: Float
         get() = done / amount.toFloat()
 
+    /**
+     * Mark a task as complete.
+     */
     fun finishOne() = done++
 
+    /**
+     * Returns the progress string of the tasks.
+     *
+     * @return The formatted progress string.
+     */
     fun getFormattedProgress(): String {
         val fillLength = (progress * length).roundToInt()
         val spaceLength = length - fillLength
