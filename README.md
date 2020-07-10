@@ -1,8 +1,9 @@
 # Exploding Words Data Processor
 
-![Build Status](https://travis-ci.org/Android-Swarm/exploding-words-data.svg?branch=master)
-![Codecov](https://img.shields.io/codecov/c/github/Android-Swarm/exploding-words-data)
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/Android-Swarm/exploding-words-data)
+[![Build Status](https://travis-ci.org/Android-Swarm/exploding-words-data.svg?branch=master)](https://travis-ci.org/Android-Swarm/exploding-words-data)
+[![Codecov](https://img.shields.io/codecov/c/github/Android-Swarm/exploding-words-data)](https://codecov.io/gh/Android-Swarm/exploding-words-data)
+[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/Android-Swarm/exploding-words-data)](https://www.codefactor.io/repository/github/android-swarm/exploding-words-data)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Android-Swarm/exploding-words-data/issues)
 
 This mini-project is part of the Exploding Words Android application. It is solely responsible for preparing the data to be seeded to the backend database. The data is the list of English words together with the definition and example sentence.
 
