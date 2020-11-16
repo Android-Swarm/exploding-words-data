@@ -5,7 +5,7 @@
 [![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/Android-Swarm/exploding-words-data)](https://www.codefactor.io/repository/github/android-swarm/exploding-words-data)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Android-Swarm/exploding-words-data/issues)
 
-This mini-project is part of the Exploding Words Android application. It is solely responsible for preparing the data to be seeded to the backend database. The data is the list of English words together with the definition and example sentence.
+This mini-project is part of the Exploding Words application. It is solely responsible for preparing the data to be seeded to the backend database. The data is the list of English words together with the definition and example sentence.
 
 Instead of processing the raw list of English words, this application also allows modification to the list. The allowed operations are the `ADD` operation and the `DELETE` operation. The app also provides the `CHECK` operation to verify the existence of a word in the list, which can ease the modification of the list. Finally, to get the desired data, the application calls the external Urban Dictionary API to get the definition and example; parse them together with the word into a `JSON` structured file (known as the `DUMP` operation). For more details on the design and implementation, check the wiki section of this repository.
 
